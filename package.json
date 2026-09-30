@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "song:add": "node scripts/add-song.mjs",
+    "songs:check": "node scripts/check-songs.mjs",
+    "bg:prepare": "node scripts/prepare-bg.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
