@@ -1,4 +1,5 @@
 import Background from "@/components/Background";
+import BusBell from "@/components/BusBell";
 import Player from "@/components/Player/Player";
 import Title from "@/components/Title";
 import OnboardPill from "@/components/OnboardPill";
@@ -10,6 +11,7 @@ export default function Home() {
       <Background />
       <TopBar center={<OnboardPill />} />
       <Title />
+      <BusBell />
       <Player />
     </main>
   );
