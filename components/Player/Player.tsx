@@ -1,18 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
 import { songs } from "@/lib/songs";
 import Controls from "./Controls";
 import Cover from "./Cover";
 import ProgressBar from "./ProgressBar";
 import VolumeControl from "./VolumeControl";
 
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  return (
+    target.isContentEditable ||
+    ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(target.tagName) ||
+    target.getAttribute("role") === "slider"
+  );
+}
+
 export default function Player() {
-  const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(80);
-  const song = songs[index];
-  const count = songs.length;
+  const { status, actions, containerRef } = useYouTubePlayer(songs, { volume });
+  const { song, playing, loading, started, currentTime, duration, error } = status;
+
+  // Space toggles playback unless focus is somewhere that uses the key itself.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code !== "Space" || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTypingTarget(e.target)) return;
+      e.preventDefault();
+      actions.toggle();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [actions]);
 
   if (!song) return null;
 
@@ -21,6 +41,17 @@ export default function Player() {
       aria-label="Music player"
       className="absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4 sm:pb-8"
     >
+      {/* The YouTube iframe lives off-screen; only its audio is used. */}
+      <div
+        ref={containerRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed -left-[9999px] top-0 size-[200px] overflow-hidden opacity-0"
+      />
+
+      <p className="sr-only" aria-live="polite">
+        {started && !error ? `Now playing: ${song.title} by ${song.artist}` : ""}
+      </p>
+
       <div className="glass flex w-full max-w-[600px] items-center gap-3 rounded-[2rem] py-2.5 pl-2.5 pr-2 sm:gap-4 sm:rounded-full sm:py-3 sm:pl-3 sm:pr-4">
         <Cover song={song} playing={playing} />
 
@@ -29,17 +60,20 @@ export default function Player() {
             <p className="truncate text-sm font-semibold leading-tight text-cream sm:text-base" title={song.title}>
               {song.title}
             </p>
-            <p className="truncate text-xs leading-tight text-cream/70 sm:text-[13px]">{song.artist}</p>
+            <p className="truncate text-xs leading-tight text-cream/70 sm:text-[13px]">
+              {error ?? song.artist}
+            </p>
           </div>
-          <ProgressBar currentTime={0} duration={song.duration} onSeek={() => {}} />
+          <ProgressBar currentTime={currentTime} duration={duration} onSeek={actions.seek} />
         </div>
 
         <Controls
           playing={playing}
-          emphasise={!playing}
-          onToggle={() => setPlaying((p) => !p)}
-          onPrevious={() => setIndex((i) => (i - 1 + count) % count)}
-          onNext={() => setIndex((i) => (i + 1) % count)}
+          loading={loading}
+          emphasise={!started}
+          onToggle={actions.toggle}
+          onPrevious={actions.previous}
+          onNext={actions.next}
         />
 
         <div className="hidden sm:block">
