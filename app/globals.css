@@ -99,7 +99,116 @@ body {
     0 6px 24px rgb(42 20 14 / 0.45);
 }
 
+/* Frosted, maroon-tinted glass used by the player. */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgb(110 20 20 / 0.55),
+    rgb(60 14 12 / 0.45)
+  );
+  border: 1px solid rgb(255 243 224 / 0.16);
+  box-shadow:
+    0 18px 50px rgb(20 6 4 / 0.45),
+    inset 0 1px 0 rgb(255 243 224 / 0.12);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(22px) saturate(140%);
+}
+
+@keyframes spin-record {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.vinyl {
+  animation: spin-record 14s linear infinite;
+  animation-play-state: paused;
+}
+
+.vinyl[data-playing="true"] {
+  animation-play-state: running;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 450ms ease-out both;
+}
+
+@keyframes soft-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 243 224 / 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgb(255 243 224 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 243 224 / 0);
+  }
+}
+
+.play-button[data-emphasise] {
+  animation: soft-pulse 2.4s ease-out infinite;
+}
+
+.volume-range {
+  appearance: none;
+  background: transparent;
+}
+
+.volume-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-cream) var(--fill),
+    rgb(255 243 224 / 0.25) var(--fill)
+  );
+}
+
+.volume-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(255 243 224 / 0.25);
+}
+
+.volume-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-cream);
+}
+
+.volume-range::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--color-cream);
+}
+
+.volume-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-cream);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .vinyl {
+    animation: none;
+  }
+
   .bus-sway {
     animation: none;
   }
