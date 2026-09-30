@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useMediaSession } from "@/hooks/useMediaSession";
+import { useVolume } from "@/hooks/useVolume";
 import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
 import { songs } from "@/lib/songs";
 import Controls from "./Controls";
@@ -18,9 +20,11 @@ function isTypingTarget(target: EventTarget | null) {
 }
 
 export default function Player() {
-  const [volume, setVolume] = useState(80);
+  const [volume, setVolume] = useVolume();
   const { status, actions, containerRef } = useYouTubePlayer(songs, { volume });
   const { song, playing, loading, started, currentTime, duration, error } = status;
+
+  useMediaSession({ song, playing, started, currentTime, duration, handlers: actions });
 
   // Space toggles playback unless focus is somewhere that uses the key itself.
   useEffect(() => {
