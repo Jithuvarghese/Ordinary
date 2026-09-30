@@ -1,1 +1,114 @@
 @import "tailwindcss";
+
+@theme {
+  --color-hot-red: #d9251c;
+  --color-sunset: #f2893a;
+  --color-salmon: #f4a28c;
+  --color-mint: #b7e3c9;
+  --color-teal: #1f7f8e;
+  --color-cream: #fff3e0;
+  --color-deep-brown: #2a140e;
+  --color-maroon: #6e1414;
+
+  --font-sans: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  --font-ml: var(--font-malayalam), var(--font-ui), sans-serif;
+}
+
+:root {
+  /* Tune these to line the UI up with the artwork. */
+  --bg-position-desktop: 50% 40%;
+  --bg-position-mobile: 50% 35%;
+  --title-top: 23dvh;
+  --title-scale: 1;
+
+  color-scheme: dark;
+}
+
+@media (max-aspect-ratio: 3/4) {
+  :root {
+    --title-top: 21dvh;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--color-deep-brown);
+  color: var(--color-cream);
+  overscroll-behavior: none;
+}
+
+body {
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 3px;
+}
+
+/* Gentle sway, like sitting in an idling bus. */
+@keyframes bus-sway {
+  0%,
+  100% {
+    transform: scale(1.02) translate3d(0, 0, 0) rotate(0deg);
+  }
+  20% {
+    transform: scale(1.022) translate3d(-0.25%, 0.2%, 0) rotate(-0.08deg);
+  }
+  45% {
+    transform: scale(1.02) translate3d(0.2%, -0.15%, 0) rotate(0.06deg);
+  }
+  70% {
+    transform: scale(1.024) translate3d(-0.1%, 0.25%, 0) rotate(-0.04deg);
+  }
+}
+
+.bus-sway {
+  animation: bus-sway 9s ease-in-out infinite;
+  transform: scale(1.02);
+  will-change: transform;
+}
+
+.bg-art {
+  object-position: var(--bg-position-desktop);
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .bg-art {
+    object-position: var(--bg-position-mobile);
+  }
+}
+
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+.fallback-sky {
+  background:
+    radial-gradient(120% 80% at 50% 45%, #f7b267 0%, transparent 60%),
+    linear-gradient(180deg, #f2893a 0%, #d9251c 45%, #7a2314 75%, #2a140e 100%);
+}
+
+.title-shadow {
+  text-shadow:
+    0 2px 0 rgb(42 20 14 / 0.35),
+    0 6px 24px rgb(42 20 14 / 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bus-sway {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
