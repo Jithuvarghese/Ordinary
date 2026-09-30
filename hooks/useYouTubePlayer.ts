@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { isPlaceholder, type Song } from "@/lib/songs";
+import { radioNow } from "@/lib/radio";
 import { sessionOrder } from "@/lib/shuffle";
 import { loadYouTubeApi, YT_STATE, type YTPlayer } from "@/lib/youtube";
 
@@ -32,10 +33,15 @@ export type PlayerActions = {
 
 type Options = {
   volume: number;
+  /** Everyone hears the same song at the same offset; skipping and seeking are off. */
+  radio?: boolean;
 };
 
-export function useYouTubePlayer(songs: Song[], { volume }: Options) {
-  const [order] = useState(() => sessionOrder(songs.length, sessionSeed));
+export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Options) {
+  const [order] = useState(() =>
+    radio ? songs.map((_, i) => i) : sessionOrder(songs.length, sessionSeed),
+  );
+  const pendingOffsetRef = useRef(0);
   const [pos, setPos] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,7 +70,7 @@ export function useYouTubePlayer(songs: Song[], { volume }: Options) {
 
   /** Moves to a queue position and loads (or just cues) that song. */
   const goTo = useCallback(
-    (nextPos: number, autoplay: boolean) => {
+    (nextPos: number, autoplay: boolean, offset = 0) => {
       if (order.length === 0) return;
       const wrapped = ((nextPos % order.length) + order.length) % order.length;
       const target = songAt(wrapped);
@@ -76,9 +82,10 @@ export function useYouTubePlayer(songs: Song[], { volume }: Options) {
       const player = playerRef.current;
       if (!player || !readyRef.current) return;
       cuedIdRef.current = target.id;
+      pendingOffsetRef.current = 0;
       if (autoplay) {
         setLoading(true);
-        player.loadVideoById(target.id);
+        player.loadVideoById(target.id, offset);
       } else {
         player.cueVideoById(target.id);
       }
@@ -130,11 +137,13 @@ export function useYouTubePlayer(songs: Song[], { volume }: Options) {
               const current = songAt(posRef.current);
               if (current.id !== cuedIdRef.current) {
                 cuedIdRef.current = current.id;
-                if (wantPlayRef.current) target.loadVideoById(current.id);
+                if (wantPlayRef.current) target.loadVideoById(current.id, pendingOffsetRef.current);
                 else target.cueVideoById(current.id);
               } else if (wantPlayRef.current) {
-                target.playVideo();
+                if (pendingOffsetRef.current > 0) target.loadVideoById(current.id, pendingOffsetRef.current);
+                else target.playVideo();
               }
+              pendingOffsetRef.current = 0;
             },
             onStateChange: ({ target, data }) => {
               switch (data) {
@@ -255,13 +264,22 @@ export function useYouTubePlayer(songs: Song[], { volume }: Options) {
     setError(null);
     errorStreakRef.current = 0;
     const player = playerRef.current;
-    if (player && readyRef.current) {
+    if (radio) {
+      // Join the live schedule wherever it is right now.
+      const { index, offset } = radioNow(songs, Date.now());
+      pendingOffsetRef.current = offset;
+      goTo(index, true, offset);
+      if (!(player && readyRef.current)) {
+        setLoading(true);
+        ensurePlayer();
+      }
+    } else if (player && readyRef.current) {
       player.playVideo();
     } else {
       setLoading(true);
       ensurePlayer();
     }
-  }, [ensurePlayer, order.length, songs]);
+  }, [ensurePlayer, goTo, order.length, radio, songs]);
 
   const pause = useCallback(() => {
     wantPlayRef.current = false;
@@ -276,21 +294,24 @@ export function useYouTubePlayer(songs: Song[], { volume }: Options) {
   }, [pause, play]);
 
   const next = useCallback(() => {
+    if (radio) return;
     goTo(posRef.current + 1, wantPlayRef.current);
-  }, [goTo]);
+  }, [goTo, radio]);
 
   const seek = useCallback((seconds: number) => {
+    if (radio) return;
     const player = playerRef.current;
     setCurrentTime(seconds);
     if (player && readyRef.current) player.seekTo(seconds, true);
-  }, []);
+  }, [radio]);
 
   const previous = useCallback(() => {
+    if (radio) return;
     const player = playerRef.current;
     const elapsed = player && readyRef.current ? player.getCurrentTime() : 0;
     if (elapsed > 3) seek(0);
     else goTo(posRef.current - 1, wantPlayRef.current);
-  }, [goTo, seek]);
+  }, [goTo, radio, seek]);
 
   const status: PlayerStatus = {
     song,

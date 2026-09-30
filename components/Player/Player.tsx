@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { siteConfig } from "@/config/site";
 import { useMediaSession } from "@/hooks/useMediaSession";
 import { useVolume } from "@/hooks/useVolume";
 import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
+import { isRadioReady } from "@/lib/radio";
 import { songs } from "@/lib/songs";
 import Controls from "./Controls";
 import Cover from "./Cover";
@@ -19,9 +21,11 @@ function isTypingTarget(target: EventTarget | null) {
   );
 }
 
+const radio = siteConfig.radioMode && isRadioReady(songs);
+
 export default function Player() {
   const [volume, setVolume] = useVolume();
-  const { status, actions, containerRef } = useYouTubePlayer(songs, { volume });
+  const { status, actions, containerRef } = useYouTubePlayer(songs, { volume, radio });
   const { song, playing, loading, started, currentTime, duration, error } = status;
 
   useMediaSession({ song, playing, started, currentTime, duration, handlers: actions });
