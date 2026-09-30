@@ -251,3 +251,26 @@ body {
 .tick {
   animation: tick 260ms ease-out both;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot {
+    display: none;
+  }
+
+  .play-button[data-emphasise] {
+    animation: none;
+    box-shadow: 0 0 0 4px rgb(255 243 224 / 0.35);
+  }
+
+  .fade-in,
+  .tick {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+}
