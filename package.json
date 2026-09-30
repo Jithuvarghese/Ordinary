@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "song:add": "node scripts/add-song.mjs",
     "songs:check": "node scripts/check-songs.mjs",
-    "bg:prepare": "node scripts/prepare-bg.mjs"
+    "bg:prepare": "node scripts/prepare-bg.mjs",
+    "assets:make": "node scripts/make-assets.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
