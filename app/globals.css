@@ -52,16 +52,16 @@ body {
 @keyframes bus-sway {
   0%,
   100% {
-    transform: scale(1.02) translate3d(0, 0, 0) rotate(0deg);
+    transform: scale(1.022) translate3d(0, 0, 0) rotate(0deg);
   }
   20% {
-    transform: scale(1.022) translate3d(-0.25%, 0.2%, 0) rotate(-0.08deg);
+    transform: scale(1.0242) translate3d(-0.275%, 0.22%, 0) rotate(-0.088deg);
   }
   45% {
-    transform: scale(1.02) translate3d(0.2%, -0.15%, 0) rotate(0.06deg);
+    transform: scale(1.022) translate3d(0.22%, -0.165%, 0) rotate(0.066deg);
   }
   70% {
-    transform: scale(1.024) translate3d(-0.1%, 0.25%, 0) rotate(-0.04deg);
+    transform: scale(1.0264) translate3d(-0.11%, 0.275%, 0) rotate(-0.044deg);
   }
 }
 
