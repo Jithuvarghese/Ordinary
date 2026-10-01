@@ -53,7 +53,7 @@ Background files are `public/bg/bus-interior.webp` and `public/bg/bus-interior-m
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (live counter) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key (live counter) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key (live counter). `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` also works |
 | `NEXT_PUBLIC_SITE_URL` | Production URL, used for metadata, sitemap and social cards |
 
 Without the Supabase variables the counter shows `1 onboard` (just you); no number is made up.
