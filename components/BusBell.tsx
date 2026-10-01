@@ -2,23 +2,21 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ringBell } from "@/lib/bell";
-import { isTypingTarget } from "@/lib/dom";
-import { useVolume } from "@/hooks/useVolume";
 
 export default function BusBell() {
-  const [volume] = useVolume();
   const [ringing, setRinging] = useState(false);
 
   const ring = useCallback(() => {
-    ringBell(volume / 100);
+    ringBell();
     setRinging(true);
     window.setTimeout(() => setRinging(false), 600);
-  }, [volume]);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() !== "b" || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (isTypingTarget(e.target)) return;
+      const t = e.target;
+      if (t instanceof HTMLElement && (t.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(t.tagName))) return;
       ring();
     };
     window.addEventListener("keydown", onKeyDown);
