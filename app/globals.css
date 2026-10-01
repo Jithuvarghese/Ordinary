@@ -287,6 +287,15 @@ body {
   animation: bell-swing 0.6s ease-in-out;
 }
 
+@keyframes conductor-speak {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+.conductor-speak {
+  animation: conductor-speak 0.7s ease-in-out infinite;
+}
+
 @keyframes led-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -300,6 +309,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .bell-swing,
+  .conductor-speak,
   .led-scroll {
     animation: none;
   }
