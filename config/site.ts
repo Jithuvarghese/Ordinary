@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   links: {
     spotify: "https://open.spotify.com/playlist/4TCIOtGVnhVf6qtb0kPwTF",
-    ytMusic: "https://music.youtube.com/playlist?list=REPLACE_ME",
+    ytMusic: "https://music.youtube.com/playlist?list=PLkX31-lqoSPdV5dI4SQPTYxxlwRiSOLzD",
   },
   onboardLabel: "onboard",
   lastStopLabel: "അവസാന സ്റ്റോപ്പ് ടൈമർ",

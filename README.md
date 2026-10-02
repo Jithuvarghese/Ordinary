@@ -37,7 +37,7 @@ Songs live in [data/songs.json](data/songs.json):
 { "id": "youtube-video-id", "title": "Song title", "artist": "Channel", "duration": 0 }
 ```
 
-The file ships with three `REPLACE_ME_*` placeholders. Until you add real songs, pressing play shows a message instead of playing anything.
+Add songs with `npm run song:add`. If the list only contains `REPLACE_ME_*` placeholders, pressing play shows a message instead of playing anything.
 
 ### Tuning the artwork
 
