@@ -30,7 +30,7 @@ export function useMediaSession({ song, playing, started, currentTime, duration,
     navigator.mediaSession.metadata = new MediaMetadata({
       title: song.title,
       artist: song.artist,
-      album: "Limited Stop",
+      album: "Ordinary",
       artwork: cover
         ? [{ src: new URL(cover, window.location.origin).href, sizes: "480x360", type: "image/jpeg" }]
         : [],

@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { migrateKey } from "@/lib/storage";
 import { getSupabase } from "@/lib/supabase";
 
 const CHANNEL = "onboard";
-const KEY_STORAGE = "limited-stop:presence-key";
+const KEY_STORAGE = "ordinary:presence-key";
+const LEGACY_KEY_STORAGE = "limited-stop:presence-key";
 
 let warned = false;
 
 /** Random per-tab key; carries no personal data. */
 function tabKey(): string {
   try {
+    migrateKey(window.sessionStorage, LEGACY_KEY_STORAGE, KEY_STORAGE);
     const existing = window.sessionStorage.getItem(KEY_STORAGE);
     if (existing) return existing;
     const created = crypto.randomUUID();

@@ -1,14 +1,17 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
+import { migrateKey } from "@/lib/storage";
 
-const KEY = "limited-stop:volume";
+const KEY = "ordinary:volume";
+const LEGACY_KEY = "limited-stop:volume";
 const DEFAULT_VOLUME = 80;
 
 const listeners = new Set<() => void>();
 
 function read(): number {
   try {
+    migrateKey(window.localStorage, LEGACY_KEY, KEY);
     const raw = window.localStorage.getItem(KEY);
     if (raw === null) return DEFAULT_VOLUME;
     const value = Number(raw);

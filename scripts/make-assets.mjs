@@ -9,7 +9,7 @@ import sharp from "sharp";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const pub = (...p) => path.join(root, "public", ...p);
 
-const title = "ലിമിറ്റഡ് സ്റ്റോപ്പ്";
+const title = "ഓർഡിനറി";
 const card = Buffer.from(`
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">
   <defs>
@@ -23,7 +23,7 @@ const card = Buffer.from(`
   <text x="600" y="172" text-anchor="middle" font-family="Nirmala UI, Noto Sans Malayalam, sans-serif"
         font-weight="800" font-size="82" fill="#fff3e0">${title}</text>
   <text x="600" y="630" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif"
-        font-size="40" letter-spacing="8" fill="#fff3e0" fill-opacity=".85">LIMITED STOP</text>
+        font-size="40" letter-spacing="8" fill="#fff3e0" fill-opacity=".85">ORDINARY</text>
 </svg>`);
 
 await sharp(pub("bg", "bus-interior.webp"))

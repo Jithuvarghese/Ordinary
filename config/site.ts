@@ -15,8 +15,8 @@ export type SiteConfig = {
 };
 
 export const siteConfig: SiteConfig = {
-  name: "Limited Stop",
-  nameMl: "ലിമിറ്റഡ് സ്റ്റോപ്പ്",
+  name: "Ordinary",
+  nameMl: "ഓർഡിനറി",
   tagline: "The sound of a Kerala private bus.",
   description:
     "Take a seat on an old Kerala town bus and ride along to the Malayalam songs that play through its speakers.",
