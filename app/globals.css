@@ -291,3 +291,45 @@ body {
     animation: none;
   }
 }
+
+/* Last-stop timer: red glow like the bus stop indicator, LED digits, popover and message card. */
+.stop-glow {
+  border-color: rgb(255 74 46 / 0.5);
+  box-shadow:
+    0 0 14px rgb(255 74 46 / 0.4),
+    0 0 4px rgb(255 74 46 / 0.35);
+}
+
+.led-digit {
+  color: #ff4a2e;
+  text-shadow: 0 0 6px rgb(255 74 46 / 0.8);
+}
+
+@keyframes soft-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes soft-out {
+  to { opacity: 0; }
+}
+
+.popover-in {
+  animation: soft-in 160ms ease-out both;
+}
+
+.stop-card-in {
+  animation: soft-in 1800ms ease-out both;
+}
+
+.stop-card-out {
+  animation: soft-out 500ms ease-in forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover-in,
+  .stop-card-in,
+  .stop-card-out {
+    animation: none;
+  }
+}

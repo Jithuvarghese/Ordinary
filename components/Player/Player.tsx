@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { siteConfig } from "@/config/site";
+import LastStopTimer from "@/components/LastStopTimer";
+import { useLastStopTimer } from "@/hooks/useLastStopTimer";
 import { useMediaSession } from "@/hooks/useMediaSession";
 import { useVolume } from "@/hooks/useVolume";
-import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
+import { useYouTubePlayer, type PlayerActions } from "@/hooks/useYouTubePlayer";
 import { isRadioReady } from "@/lib/radio";
 import { songs } from "@/lib/songs";
 import Controls from "./Controls";
@@ -25,8 +27,47 @@ const radio = siteConfig.radioMode && isRadioReady(songs);
 
 export default function Player() {
   const [volume, setVolume] = useVolume();
-  const { status, actions, containerRef } = useYouTubePlayer(songs, { volume, radio });
+  const { status, actions: base, containerRef } = useYouTubePlayer(songs, { volume, radio });
   const { song, playing, loading, started, currentTime, duration, error } = status;
+
+  const timer = useLastStopTimer({
+    playing,
+    volume,
+    pause: base.pause,
+    setOutputVolume: base.setOutputVolume,
+    restoreVolume: base.restoreVolume,
+  });
+  const { cancelFade, dismissMessage } = timer;
+
+  // Pressing play or changing the volume during the end-of-timer fade cancels it and keeps playing.
+  const actions = useMemo<PlayerActions>(
+    () => ({
+      ...base,
+      play: () => {
+        cancelFade();
+        dismissMessage();
+        base.play();
+      },
+      pause: () => {
+        cancelFade();
+        base.pause();
+      },
+      toggle: () => {
+        if (cancelFade()) return;
+        dismissMessage();
+        base.toggle();
+      },
+    }),
+    [base, cancelFade, dismissMessage],
+  );
+
+  const changeVolume = useCallback(
+    (next: number) => {
+      cancelFade();
+      setVolume(next);
+    },
+    [cancelFade, setVolume],
+  );
 
   useMediaSession({ song, playing, started, currentTime, duration, handlers: actions });
 
@@ -55,6 +96,24 @@ export default function Player() {
         aria-hidden="true"
         className="pointer-events-none fixed -left-[9999px] top-0 size-[200px] overflow-hidden opacity-0"
       />
+
+      <LastStopTimer minutes={timer.minutes} remaining={timer.remaining} onSelect={timer.select} />
+
+      <div
+        aria-live="polite"
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(max(0.75rem,env(safe-area-inset-bottom))+6rem)] z-20 flex justify-center px-3 sm:bottom-36 sm:px-4"
+      >
+        {timer.message !== "hidden" ? (
+          <div
+            onClick={dismissMessage}
+            className={`glass pointer-events-auto max-w-[600px] cursor-pointer rounded-2xl px-6 py-4 text-center font-ml text-lg font-semibold leading-snug text-cream sm:text-xl ${
+              timer.message === "leaving" ? "stop-card-out" : "stop-card-in"
+            }`}
+          >
+            <span lang="ml">{siteConfig.lastStopMessage}</span>
+          </div>
+        ) : null}
+      </div>
 
       <p className="sr-only" aria-live="polite">
         {started && !error ? `Now playing: ${song.title} by ${song.artist}` : ""}
@@ -85,7 +144,7 @@ export default function Player() {
         />
 
         <div className="hidden sm:block">
-          <VolumeControl volume={volume} onChange={setVolume} />
+          <VolumeControl volume={volume} onChange={changeVolume} />
         </div>
       </div>
     </section>

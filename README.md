@@ -73,6 +73,7 @@ The site joins one Realtime channel named `onboard` and tracks a random per-tab 
 
 ## Optional features
 
+- **Last-stop timer**: the round button on the right edge sets a sleep timer (off, 15 min, 30 min or 1 hr) and shows the minutes left while it runs. The end time is an absolute timestamp, so it stays accurate in background tabs, and it is not saved across reloads. When it ends the bell rings, the volume fades to zero over 5 seconds, the music pauses and a thank-you card appears until you press play or tap it. The saved volume is restored afterwards, and pressing play or moving the volume during the fade cancels it. The button label and the message live in the config.
 - **Destination ticker**: the LED-style route board under the clock. Edit `routes` in the config; leave it empty to hide it.
 - **Shared radio mode**: set `radioMode: true` in the config and give every song a real `duration` in seconds. Everyone then hears the same song at the same offset, derived from the clock with no server. Skipping and seeking are disabled in this mode.
 

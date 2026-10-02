@@ -9,6 +9,8 @@ export type SiteConfig = {
     ytMusic: string;
   };
   onboardLabel: string;
+  lastStopLabel: string;
+  lastStopMessage: string;
   timeZone: string;
   routes: string[];
   radioMode: boolean;
@@ -26,6 +28,8 @@ export const siteConfig: SiteConfig = {
     ytMusic: "https://music.youtube.com/playlist?list=REPLACE_ME",
   },
   onboardLabel: "onboard",
+  lastStopLabel: "അവസാന സ്റ്റോപ്പ് ടൈമർ",
+  lastStopMessage: "ലാസ്റ്റ് സ്റ്റോപ്പ്. കൂടെ യാത്ര ചെയ്തതിന് നന്ദി.",
   timeZone: "Asia/Kolkata",
   routes: [
     "Thrissur",

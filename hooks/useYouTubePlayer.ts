@@ -29,6 +29,10 @@ export type PlayerActions = {
   next: () => void;
   previous: () => void;
   seek: (seconds: number) => void;
+  /** Sets the player volume without touching the saved volume setting. */
+  setOutputVolume: (volume: number) => void;
+  /** Puts the player back at the saved volume setting. */
+  restoreVolume: () => void;
 };
 
 type Options = {
@@ -288,6 +292,14 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
     playerRef.current?.pauseVideo();
   }, []);
 
+  const setOutputVolume = useCallback((value: number) => {
+    if (readyRef.current) playerRef.current?.setVolume(value);
+  }, []);
+
+  const restoreVolume = useCallback(() => {
+    if (readyRef.current) playerRef.current?.setVolume(volumeRef.current);
+  }, []);
+
   const toggle = useCallback(() => {
     if (wantPlayRef.current) pause();
     else play();
@@ -324,8 +336,8 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
     error,
   };
   const actions = useMemo<PlayerActions>(
-    () => ({ play, pause, toggle, next, previous, seek }),
-    [play, pause, toggle, next, previous, seek],
+    () => ({ play, pause, toggle, next, previous, seek, setOutputVolume, restoreVolume }),
+    [play, pause, toggle, next, previous, seek, setOutputVolume, restoreVolume],
   );
 
   return { status, actions, containerRef };
