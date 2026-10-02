@@ -43,7 +43,7 @@ export default function Clock() {
   return (
     <time
       dateTime={date?.toISOString()}
-      className="min-w-[4.5rem] text-sm font-medium tabular-nums tracking-wide text-cream sm:text-base"
+      className="min-w-[4.5rem] whitespace-nowrap text-sm font-medium tabular-nums tracking-wide text-cream sm:text-base"
     >
       {date ? formatClock(date, siteConfig.timeZone) : " "}
     </time>

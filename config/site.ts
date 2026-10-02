@@ -8,7 +8,7 @@ export type SiteConfig = {
     spotify: string;
     ytMusic: string;
   };
-  onboardLabel: string;
+  passengerLabel: { one: string; other: string };
   lastStopLabel: string;
   lastStopMessage: string;
   timeZone: string;
@@ -27,7 +27,7 @@ export const siteConfig: SiteConfig = {
     spotify: "https://open.spotify.com/playlist/4TCIOtGVnhVf6qtb0kPwTF",
     ytMusic: "https://music.youtube.com/playlist?list=PLkX31-lqoSPdV5dI4SQPTYxxlwRiSOLzD",
   },
-  onboardLabel: "onboard",
+  passengerLabel: { one: "passenger", other: "passengers" },
   lastStopLabel: "അവസാന സ്റ്റോപ്പ് ടൈമർ",
   lastStopMessage: "ലാസ്റ്റ് സ്റ്റോപ്പ്. കൂടെ യാത്ര ചെയ്തതിന് നന്ദി.",
   timeZone: "Asia/Kolkata",

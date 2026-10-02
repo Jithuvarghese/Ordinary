@@ -38,7 +38,7 @@ export function usePresenceCount(): number {
       if (process.env.NODE_ENV !== "production" && !warned) {
         warned = true;
         console.warn(
-          "[presence] NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY (or _PUBLISHABLE_KEY) are not set; showing 1 onboard.",
+          "[presence] NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY (or _PUBLISHABLE_KEY) are not set; showing 1 passenger.",
         );
       }
       return;

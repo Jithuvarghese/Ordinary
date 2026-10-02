@@ -10,7 +10,7 @@ export default function OnboardPill() {
     <div
       role="status"
       aria-live="polite"
-      className="inline-flex items-center gap-2 rounded-full border border-cream/20 bg-deep-brown/45 px-3.5 py-1.5 text-sm font-medium text-cream shadow-lg backdrop-blur-md sm:text-[15px]"
+      className="inline-flex items-center gap-2 rounded-full border border-cream/20 bg-deep-brown/45 px-3 py-1.5 text-[13px] font-medium sm:px-3.5 sm:text-[15px] text-cream shadow-lg backdrop-blur-md"
     >
       <span className="relative flex size-2">
         <span className="pulse-dot absolute inline-flex size-full rounded-full bg-emerald-400" />
@@ -20,7 +20,7 @@ export default function OnboardPill() {
         <span key={count} className="tick inline-block">
           {count}
         </span>{" "}
-        {siteConfig.onboardLabel}
+        {count === 1 ? siteConfig.passengerLabel.one : siteConfig.passengerLabel.other}
       </span>
     </div>
   );

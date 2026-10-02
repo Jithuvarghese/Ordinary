@@ -98,8 +98,8 @@ export default function LastStopTimer({ minutes, remaining, onSelect }: Props) {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <rect x="5" y="3" width="14" height="9" rx="2" />
-            <path d="M12 12v9M8.5 21h7M9 7.5h6" />
+            <circle cx="12" cy="13" r="7" />
+            <path d="M12 9.5V13l2.5 1.5M5 4.5 2.5 7M19 4.5 21.5 7" />
           </svg>
           {running ? (
             <span aria-hidden="true" className="led-digit text-[10px] font-bold leading-none tabular-nums">

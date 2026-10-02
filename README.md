@@ -2,7 +2,7 @@
 
 A single-screen tribute to the sound of Kerala private buses. You sit inside an old town bus, looking toward the driver, while Malayalam bus-ride songs play.
 
-Built with Next.js (App Router), TypeScript and Tailwind CSS. Audio comes from the YouTube IFrame Player API, and the live "onboard" counter uses Supabase Realtime Presence. There are no cookies, trackers or ads, and no personal data is collected.
+Built with Next.js (App Router), TypeScript and Tailwind CSS. Audio comes from the YouTube IFrame Player API, and the live passenger counter uses Supabase Realtime Presence. There are no cookies, trackers or ads, and no personal data is collected.
 
 ## Getting started
 
@@ -29,7 +29,7 @@ Open http://localhost:3000.
 
 ## Configuration
 
-Everything you are likely to change lives in [config/site.ts](config/site.ts): site name (English and Malayalam), tagline, description, Spotify and YT Music playlist URLs, the onboard label, timezone, the route ticker list and the `radioMode` flag.
+Everything you are likely to change lives in [config/site.ts](config/site.ts): site name (English and Malayalam), tagline, description, Spotify and YT Music playlist URLs, the passenger label (singular and plural), timezone, the route ticker list and the `radioMode` flag.
 
 Songs live in [data/songs.json](data/songs.json):
 
@@ -56,7 +56,7 @@ Background files are `public/bg/bus-interior.webp` and `public/bg/bus-interior-m
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key (live counter). `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` also works |
 | `NEXT_PUBLIC_SITE_URL` | Production URL, used for metadata, sitemap and social cards. Set it to `https://ordinarybus.vercel.app` (no trailing slash) |
 
-Without the Supabase variables the counter shows `1 onboard` (just you); no number is made up.
+Without the Supabase variables the counter shows `1 passenger` (just you); no number is made up.
 
 ## Supabase setup
 
@@ -83,7 +83,7 @@ The site joins one Realtime channel named `onboard` and tracks a random per-tab 
 |---|---|
 | YouTube IFrame API | Audio playback, loaded lazily in a hidden container |
 | YouTube oEmbed and `i.ytimg.com` | Song metadata and covers, used by the scripts only |
-| Supabase Realtime Presence | Live onboard count |
+| Supabase Realtime Presence | Live passenger count |
 | Spotify and YT Music playlists | Outbound links from the config |
 | Google Fonts via `next/font` | Malayalam and UI fonts, self-hosted at build time |
 
