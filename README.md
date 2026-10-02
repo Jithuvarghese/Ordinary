@@ -69,12 +69,10 @@ The site joins one Realtime channel named `onboard` and tracks a random per-tab 
 ## Keyboard
 
 - `Space`: play or pause
-- `B`: ring the bus bell
 - Seek bar: arrow keys, `Home`, `End`, `PageUp`, `PageDown`
 
 ## Optional features
 
-- **Bus bell**: a button on the right edge and the `B` key. The sound is synthesised in the browser; there is no audio file.
 - **Destination ticker**: the LED-style route board under the clock. Edit `routes` in the config; leave it empty to hide it.
 - **Shared radio mode**: set `radioMode: true` in the config and give every song a real `duration` in seconds. Everyone then hears the same song at the same offset, derived from the clock with no server. Skipping and seeking are disabled in this mode.
 
