@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { isPlaceholder, type Song } from "@/lib/songs";
 import { radioNow } from "@/lib/radio";
-import { sessionOrder } from "@/lib/shuffle";
+import { sessionOrder, shuffle as shuffleItems } from "@/lib/shuffle";
 import { loadYouTubeApi, YT_STATE, type YTPlayer } from "@/lib/youtube";
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -20,6 +20,7 @@ export type PlayerStatus = {
   currentTime: number;
   duration: number;
   error: string | null;
+  shuffled: boolean;
 };
 
 export type PlayerActions = {
@@ -29,6 +30,8 @@ export type PlayerActions = {
   next: () => void;
   previous: () => void;
   seek: (seconds: number) => void;
+  /** Turns shuffle on (random order) or off (list order); the current song keeps playing. */
+  setShuffle: (on: boolean) => void;
   /** Sets the player volume without touching the saved volume setting. */
   setOutputVolume: (volume: number) => void;
   /** Puts the player back at the saved volume setting. */
@@ -42,10 +45,11 @@ type Options = {
 };
 
 export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Options) {
-  const [order] = useState(() =>
+  const [order, setOrder] = useState(() =>
     radio ? songs.map((_, i) => i) : sessionOrder(songs.length, sessionSeed),
   );
   const pendingOffsetRef = useRef(0);
+  const [shuffled, setShuffled] = useState(!radio);
   const [pos, setPos] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -98,10 +102,10 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
   );
 
   // Keep the latest handlers reachable from the player's event callbacks.
-  const handlersRef = useRef({ goTo });
+  const handlersRef = useRef({ goTo, songAt });
   useEffect(() => {
-    handlersRef.current = { goTo };
-  }, [goTo]);
+    handlersRef.current = { goTo, songAt };
+  }, [goTo, songAt]);
 
   const ensurePlayer = useCallback(() => {
     if (loadStartedRef.current || order.length === 0) return;
@@ -114,7 +118,7 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
         if (!container) return;
         const host = document.createElement("div");
         container.appendChild(host);
-        const first = songAt(posRef.current);
+        const first = handlersRef.current.songAt(posRef.current);
         cuedIdRef.current = isPlaceholder(first) ? null : first.id;
 
         playerRef.current = new YT.Player(host, {
@@ -138,7 +142,7 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
               setReady(true);
               target.setVolume(volumeRef.current);
               // The queue may have moved while the API was loading.
-              const current = songAt(posRef.current);
+              const current = handlersRef.current.songAt(posRef.current);
               if (current.id !== cuedIdRef.current) {
                 cuedIdRef.current = current.id;
                 if (wantPlayRef.current) target.loadVideoById(current.id, pendingOffsetRef.current);
@@ -176,7 +180,7 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
               }
             },
             onError: ({ data }) => {
-              const failed = songAt(posRef.current);
+              const failed = handlersRef.current.songAt(posRef.current);
               if (isDev) {
                 console.warn(`[player] Skipping "${failed.title}" (${failed.id}), YouTube error ${data}`);
               }
@@ -199,7 +203,7 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
         setError("Couldn't reach YouTube. Check your connection.");
         if (isDev) console.warn("[player]", err);
       });
-  }, [order.length, songAt, songs]);
+  }, [order.length, songs]);
 
   // Load the API once the page has painted, or sooner on first interaction.
   useEffect(() => {
@@ -300,6 +304,23 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
     if (readyRef.current) playerRef.current?.setVolume(volumeRef.current);
   }, []);
 
+  const setShuffle = useCallback(
+    (on: boolean) => {
+      if (radio) return;
+      const currentIndex = order[posRef.current];
+      const others = order.filter((i) => i !== currentIndex);
+      const next = on
+        ? [currentIndex, ...shuffleItems(others, Math.floor(Math.random() * 2 ** 32))]
+        : songs.map((_, i) => i);
+      const nextPos = on ? 0 : currentIndex;
+      posRef.current = nextPos;
+      setOrder(next);
+      setPos(nextPos);
+      setShuffled(on);
+    },
+    [order, radio, songs],
+  );
+
   const toggle = useCallback(() => {
     if (wantPlayRef.current) pause();
     else play();
@@ -334,10 +355,11 @@ export function useYouTubePlayer(songs: Song[], { volume, radio = false }: Optio
     currentTime,
     duration,
     error,
+    shuffled,
   };
   const actions = useMemo<PlayerActions>(
-    () => ({ play, pause, toggle, next, previous, seek, setOutputVolume, restoreVolume }),
-    [play, pause, toggle, next, previous, seek, setOutputVolume, restoreVolume],
+    () => ({ play, pause, toggle, next, previous, seek, setShuffle, setOutputVolume, restoreVolume }),
+    [play, pause, toggle, next, previous, seek, setShuffle, setOutputVolume, restoreVolume],
   );
 
   return { status, actions, containerRef };

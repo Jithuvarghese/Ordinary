@@ -71,6 +71,33 @@ body {
   will-change: transform;
 }
 
+/* Portrait screens: a livelier ride, since the small sway is hard to notice there. */
+@keyframes bus-sway-mobile {
+  0%,
+  100% {
+    transform: scale(1.07) translate3d(0, 0, 0) rotate(0deg);
+  }
+  18% {
+    transform: scale(1.075) translate3d(-1.1%, 0.7%, 0) rotate(-0.4deg);
+  }
+  40% {
+    transform: scale(1.07) translate3d(0.9%, -0.5%, 0) rotate(0.3deg);
+  }
+  62% {
+    transform: scale(1.08) translate3d(-0.6%, 0.9%, 0) rotate(-0.25deg);
+  }
+  82% {
+    transform: scale(1.072) translate3d(0.8%, 0.2%, 0) rotate(0.35deg);
+  }
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .bus-sway {
+    animation: bus-sway-mobile 6.5s ease-in-out infinite;
+    transform: scale(1.07);
+  }
+}
+
 .bg-art {
   object-position: var(--bg-position-desktop);
 }

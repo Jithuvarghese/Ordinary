@@ -28,7 +28,7 @@ const radio = siteConfig.radioMode && isRadioReady(songs);
 export default function Player() {
   const [volume, setVolume] = useVolume();
   const { status, actions: base, containerRef } = useYouTubePlayer(songs, { volume, radio });
-  const { song, playing, loading, started, currentTime, duration, error } = status;
+  const { song, playing, loading, started, currentTime, duration, error, shuffled } = status;
 
   const timer = useLastStopTimer({
     playing,
@@ -138,6 +138,8 @@ export default function Player() {
           playing={playing}
           loading={loading}
           emphasise={!started}
+          shuffled={shuffled}
+          onShuffle={radio ? undefined : () => actions.setShuffle(!shuffled)}
           onToggle={actions.toggle}
           onPrevious={actions.previous}
           onNext={actions.next}
