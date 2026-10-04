@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Generates the placeholder social card (public/opengraph.png) and PNG app icons.
-// Replace opengraph.png with final artwork when it is ready.
+// Generates the placeholder social card (public/opengraph.jpg) and PNG app icons.
+// Replace opengraph.jpg with final artwork when it is ready.
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,8 +29,9 @@ const card = Buffer.from(`
 await sharp(pub("bg", "bus-interior.webp"))
   .resize(1200, 675, { fit: "cover", position: "centre" })
   .composite([{ input: card }])
-  .png({ compressionLevel: 9 })
-  .toFile(pub("opengraph.png"));
+  // JPEG keeps it small enough for WhatsApp and other link previews.
+  .jpeg({ quality: 82, mozjpeg: true })
+  .toFile(pub("opengraph.jpg"));
 
 const icon = (size, pad) =>
   Buffer.from(`
@@ -48,4 +49,4 @@ await sharp(icon(512, 0)).png().toFile(pub("icon-512.png"));
 await sharp(icon(512, 0)).resize(192, 192).png().toFile(pub("icon-192.png"));
 await sharp(icon(512, 0)).resize(180, 180).png().toFile(path.join(root, "app", "apple-icon.png"));
 await sharp(icon(512, 0)).resize(32, 32).png().toFile(path.join(root, "app", "icon.png"));
-console.log("Wrote opengraph.png and icons");
+console.log("Wrote opengraph.jpg and icons");

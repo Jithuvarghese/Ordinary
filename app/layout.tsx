@@ -17,7 +17,7 @@ const ui = Space_Grotesk({
 });
 
 const socialImage = {
-  url: "/opengraph.png",
+  url: "/opengraph.jpg",
   width: 1200,
   height: 675,
   alt: siteConfig.name,

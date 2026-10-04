@@ -25,7 +25,7 @@ Open http://localhost:3000.
 | `npm run song:add -- <url-or-id> [...]` | Add songs. Fetches title and channel from YouTube oEmbed, skips duplicates, downloads the cover to `public/covers/<id>.jpg`. The first real song replaces the placeholders. |
 | `npm run songs:check` | Checks every song still resolves through oEmbed. Exits non-zero on broken or embed-blocked videos; placeholders are skipped with a warning. |
 | `npm run bg:prepare -- <image> [focusX]` | Converts an illustration to `public/bg/bus-interior.webp` plus a portrait crop for phones. |
-| `npm run assets:make` | Regenerates the placeholder social card (`public/opengraph.png`) and icons. |
+| `npm run assets:make` | Regenerates the placeholder social card (`public/opengraph.jpg`) and icons. |
 
 ## Configuration
 
@@ -54,7 +54,7 @@ Background files are `public/bg/bus-interior.webp` and `public/bg/bus-interior-m
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (live counter) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key (live counter). `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` also works |
-| `NEXT_PUBLIC_SITE_URL` | Production URL, used for metadata, sitemap and social cards. Set it to `https://ordinarybus.vercel.app` (no trailing slash) |
+| `NEXT_PUBLIC_SITE_URL` | Production URL, used for metadata, sitemap and social cards. Production builds fall back to `https://ordinarybus.vercel.app` when it is not set. Set it to `https://ordinarybus.vercel.app` (no trailing slash) |
 
 Without the Supabase variables the counter shows `1 passenger` (just you); no number is made up.
 
@@ -94,4 +94,4 @@ The site joins one Realtime channel named `onboard` and tracks a random per-tab 
 3. Deploy. No custom server or build settings are needed.
 4. Set `NEXT_PUBLIC_SITE_URL` to `https://ordinarybus.vercel.app`, then redeploy so the social card and sitemap use it.
 
-Before launch, replace `public/opengraph.png` (1200×675) with final artwork.
+Before launch, replace `public/opengraph.jpg` (1200×675, keep it under about 300 KB so WhatsApp shows it) with final artwork.

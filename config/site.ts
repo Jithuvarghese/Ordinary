@@ -23,7 +23,10 @@ export const siteConfig: SiteConfig = {
   tagline: "The sound of a Kerala private bus.",
   description:
     "Take a seat on an old Kerala town bus and ride along to the Malayalam songs that play through its speakers.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  // Social previews need an absolute public URL, so production falls back to the live domain.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NODE_ENV === "production" ? "https://ordinarybus.vercel.app" : "http://localhost:3000"),
   links: {
     spotify: "https://open.spotify.com/playlist/4TCIOtGVnhVf6qtb0kPwTF",
     ytMusic: "https://music.youtube.com/playlist?list=PLkX31-lqoSPdV5dI4SQPTYxxlwRiSOLzD",
