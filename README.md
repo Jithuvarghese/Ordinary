@@ -29,7 +29,7 @@ Open http://localhost:3000.
 
 ## Configuration
 
-Everything you are likely to change lives in [config/site.ts](config/site.ts): site name (English and Malayalam), tagline, description, Spotify and YT Music playlist URLs, the passenger label (singular and plural), timezone, the route ticker list and the `radioMode` flag.
+Everything you are likely to change lives in [config/site.ts](config/site.ts): site name (English and Malayalam), tagline, description, Spotify and YT Music playlist URLs, the passenger label (singular and plural), the thank-you messages, `languageSwapMs` (how often the title and message swap between Malayalam and English), timezone, the route ticker list and the `radioMode` flag.
 
 Songs live in [data/songs.json](data/songs.json):
 

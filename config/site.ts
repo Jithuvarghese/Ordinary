@@ -11,6 +11,9 @@ export type SiteConfig = {
   passengerLabel: { one: string; other: string };
   lastStopLabel: string;
   lastStopMessage: string;
+  lastStopMessageEn: string;
+  /** How long each language stays on screen before swapping (title and thank-you card). */
+  languageSwapMs: number;
   timeZone: string;
   routes: string[];
   radioMode: boolean;
@@ -30,6 +33,8 @@ export const siteConfig: SiteConfig = {
   passengerLabel: { one: "passenger", other: "passengers" },
   lastStopLabel: "അവസാന സ്റ്റോപ്പ് ടൈമർ",
   lastStopMessage: "ലാസ്റ്റ് സ്റ്റോപ്പ്. കൂടെ യാത്ര ചെയ്തതിന് നന്ദി.",
+  lastStopMessageEn: "Last stop. Thank you for riding with us.",
+  languageSwapMs: 6000,
   timeZone: "Asia/Kolkata",
   routes: [
     "Thrissur",
