@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo } from "react";
 import { siteConfig } from "@/config/site";
-import CyclingText from "@/components/CyclingText";
 import LastStopTimer from "@/components/LastStopTimer";
 import { useLastStopTimer } from "@/hooks/useLastStopTimer";
 import { useMediaSession } from "@/hooks/useMediaSession";
@@ -107,14 +106,11 @@ export default function Player() {
         {timer.message !== "hidden" ? (
           <div
             onClick={dismissMessage}
-            className={`glass pointer-events-auto max-w-[600px] cursor-pointer rounded-2xl px-6 py-4 text-center text-lg font-semibold leading-snug text-cream sm:text-xl ${
+            className={`glass pointer-events-auto max-w-[600px] cursor-pointer rounded-2xl px-6 py-4 text-center font-ml text-lg font-semibold leading-snug text-cream sm:text-xl ${
               timer.message === "leaving" ? "stop-card-out" : "stop-card-in"
             }`}
           >
-            <span className="sr-only" lang="ml">
-              {siteConfig.lastStopMessage}
-            </span>
-            <CyclingText ml={siteConfig.lastStopMessage} en={siteConfig.lastStopMessageEn} />
+            <span lang="ml">{siteConfig.lastStopMessage}</span>
           </div>
         ) : null}
       </div>
