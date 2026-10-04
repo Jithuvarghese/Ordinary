@@ -1,4 +1,5 @@
 import Background from "@/components/Background";
+import Credit from "@/components/Credit";
 import Player from "@/components/Player/Player";
 import Title from "@/components/Title";
 import OnboardPill from "@/components/OnboardPill";
@@ -13,6 +14,7 @@ export default function Home() {
       <RouteTicker />
       <Title />
       <Player />
+      <Credit />
     </main>
   );
 }

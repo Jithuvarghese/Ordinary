@@ -88,7 +88,7 @@ export default function Player() {
   return (
     <section
       aria-label="Music player"
-      className="absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4 sm:pb-8"
+      className="absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-[calc(env(safe-area-inset-bottom)+1.6rem)] sm:px-4 sm:pb-8"
     >
       {/* The YouTube iframe lives off-screen; only its audio is used. */}
       <div
@@ -101,7 +101,7 @@ export default function Player() {
 
       <div
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-[calc(max(0.75rem,env(safe-area-inset-bottom))+6rem)] z-20 flex justify-center px-3 sm:bottom-36 sm:px-4"
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+6.9rem)] z-20 flex justify-center px-3 sm:bottom-36 sm:px-4"
       >
         {timer.message !== "hidden" ? (
           <div

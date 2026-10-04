@@ -11,6 +11,7 @@ export type SiteConfig = {
   passengerLabel: { one: string; other: string };
   lastStopLabel: string;
   lastStopMessage: string;
+  credit: { label: string; name: string; url: string };
   timeZone: string;
   routes: string[];
   radioMode: boolean;
@@ -30,6 +31,11 @@ export const siteConfig: SiteConfig = {
   passengerLabel: { one: "passenger", other: "passengers" },
   lastStopLabel: "അവസാന സ്റ്റോപ്പ് ടൈമർ",
   lastStopMessage: "ലാസ്റ്റ് സ്റ്റോപ്പ്. കൂടെ യാത്ര ചെയ്തതിന് നന്ദി.",
+  credit: {
+    label: "Built by",
+    name: "Jithu Varghese",
+    url: "https://jithuvargheseportfolio.vercel.app/",
+  },
   timeZone: "Asia/Kolkata",
   routes: [
     "Thrissur",
